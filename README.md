@@ -11,3 +11,5 @@ To bring together diverse talents and perspectives to create innovative solution
 ## Executive Roster
 
 **Peter Ngigi** - Chief Executive Officer
+
+**Ryan Gicheru** - Chief Operating Officer
