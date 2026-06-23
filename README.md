@@ -1,5 +1,13 @@
-The Nexus Collective
+# The Nexus Collective
 
-Company Vision:
+## Company Vision:
 
 To bring together diverse talents and perspectives to create innovative solutions that solve real-world problems through creativity, technology, and collaboration.
+
+
+---
+
+
+## Executive Roster
+
+**Peter Ngigi** - Chief Executive Officer
