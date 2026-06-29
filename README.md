@@ -15,5 +15,3 @@ To bring together diverse talents and perspectives to create innovative solution
 **Mark Talamson** - Chief Technical Officer
 
 **Joshua Adalo** - Quality Assurance Engineer
-
-**Nigel Thoya** - Quality Assurance Engineer
