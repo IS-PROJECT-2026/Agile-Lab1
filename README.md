@@ -4,12 +4,12 @@
 
 To bring together diverse talents and perspectives to create innovative solutions that solve real-world problems through creativity, technology, and collaboration.
 
-
 ---
-
 
 ## Executive Roster
 
 **Peter Ngigi** - Chief Executive Officer
 
 **Ryan Gicheru** - Chief Operating Officer
+
+**Mark Talamson** - Chief Technical Officer
