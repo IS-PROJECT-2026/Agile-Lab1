@@ -17,3 +17,5 @@ To bring together diverse talents and perspectives to create innovative solution
 **Joshua Adalo** - Quality Assurance Engineer
 
 **Nigel Thoya** - Quality Assurance Engineer
+
+**Isaac Kariuki** - Lead Software Engineer
