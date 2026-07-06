@@ -19,3 +19,5 @@ To bring together diverse talents and perspectives to create innovative solution
 **Nigel Thoya** - Quality Assurance Engineer
 
 **Isaac Kariuki** - Lead Software Engineer
+
+**Zarian Achieng'** - UI/UX Designer
