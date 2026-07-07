@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Me — Herbarium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cormorant+Upright:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --parch:    #FAF6F0;
+      --parch2:   #F2EBE0;
+      --parch3:   #D9CEBC;
+      --green:    #3D6B50;
+      --green2:   #6A9E7F;
+      --green3:   #C8DDD0;
+      --terra:    #C4614A;
+      --rose:     #8B4E6E;
+      --rose2:    #C98AB0;
+      --ink:      #2A1F1A;
+      --ink2:     #4A3B30;
+      --ink3:     #7A6858;
+      --gold:     #B8902A;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: #BCA98C;
+      min-height: 100vh;
+      padding: 36px 16px 60px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--parch);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Corner botanical SVGs */
+    .botanical-tl, .botanical-tr, .botanical-bl, .botanical-br {
+      position: absolute; pointer-events: none; z-index: 1; opacity: 0.22;
+    }
+    .botanical-tl { top: -10px; left: -10px; }
+    .botanical-tr { top: -10px; right: -10px; transform: scaleX(-1); }
+    .botanical-bl { bottom: -10px; left: -10px; transform: scaleY(-1); }
+    .botanical-br { bottom: -10px; right: -10px; transform: scale(-1); }
+
+    /* Header band */
+    .header-band {
+      background: var(--green);
+      padding: 12px 52px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .hb-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .hb-links { display: flex; gap: 24px; }
+    .hb-link {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      color: rgba(255,255,255,0.6); text-decoration: none; letter-spacing: 1px;
+    }
+    .hb-link:hover { color: #fff; }
+
+    /* Hero */
+    .hero {
+      padding: 52px 60px 40px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 36px; align-items: end;
+      border-bottom: 1.5px solid var(--parch3);
+      position: relative; z-index: 2;
+    }
+    .hero-classification {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--green); margin-bottom: 8px;
+    }
+    .hero-name {
+      font-family: 'Cormorant Upright', serif;
+      font-size: clamp(44px, 8vw, 72px);
+      font-weight: 300; color: var(--ink);
+      line-height: 1.0; letter-spacing: -1px; margin-bottom: 10px;
+    }
+    .hero-epithet {
+      font-size: 22px; font-weight: 300; font-style: italic;
+      color: var(--rose); margin-bottom: 18px; letter-spacing: 0.3px;
+    }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .hero-tag {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      padding: 4px 12px; border: 1px solid var(--parch3);
+      color: var(--ink3); letter-spacing: 0.5px; border-radius: 2px;
+    }
+
+    /* Photo mount */
+    .specimen-photo { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .photo-mount {
+      width: 130px; height: 155px;
+      background: var(--parch2); border: 1px solid var(--parch3);
+      box-shadow: inset 0 0 0 7px var(--parch), inset 0 0 0 8px var(--parch3);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative; cursor: pointer;
+    }
+    .photo-mount img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-upload-hint {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    }
+    .photo-upload-hint svg { opacity: 0.2; }
+    .photo-upload-hint span {
+      font-family: 'DM Mono', monospace; font-size: 9px;
+      color: var(--ink3); text-align: center; line-height: 1.6;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .photo-label {
+      font-size: 13px; font-style: italic; color: var(--ink3);
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Content area */
+    .content { padding: 0 60px 52px; position: relative; z-index: 2; }
+
+    /* Each specimen entry */
+    .specimen {
+      padding: 32px 0; border-bottom: 1px solid var(--parch3);
+      display: grid; grid-template-columns: 160px 1fr;
+      gap: 28px; align-items: start;
+    }
+    .specimen:last-child { border-bottom: none; }
+
+    .spec-sidebar {
+      padding-top: 4px; display: flex; flex-direction: column; gap: 5px;
+    }
+    .spec-number {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      color: var(--rose); letter-spacing: 1px;
+    }
+    .spec-genus {
+      font-size: 15px; font-style: italic; color: var(--green); line-height: 1.3;
+    }
+    .spec-family {
+      font-family: 'DM Mono', monospace; font-size: 9px;
+      color: var(--ink3); letter-spacing: 1px; text-transform: uppercase;
+    }
+    .spec-rule { width: 32px; height: 1.5px; background: var(--rose2); margin-top: 8px; }
+
+    .spec-heading {
+      font-size: 26px; font-weight: 600; color: var(--ink);
+      margin-bottom: 6px; line-height: 1.15;
+    }
+    .spec-prompt {
+      font-size: 13.5px; font-style: italic; color: var(--ink3);
+      margin-bottom: 12px; line-height: 1.65;
+    }
+    .spec-answer {
+      font-size: 17px; font-weight: 300; color: var(--ink2); line-height: 1.85;
+    }
+
+    /* Materia medica (tech stack) */
+    .materia { display: flex; flex-direction: column; gap: 0; }
+    .materia-row {
+      display: grid; grid-template-columns: 120px 1fr;
+      gap: 12px; padding: 9px 0;
+      border-bottom: 1px dashed var(--parch3); font-size: 16px; align-items: baseline;
+    }
+    .materia-row:last-child { border-bottom: none; }
+    .mat-label {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      color: var(--green); letter-spacing: 0.8px; text-transform: uppercase; padding-top: 2px;
+    }
+    .mat-val { font-style: italic; color: var(--ink2); font-size: 16px; }
+    .mat-val.placeholder { color: var(--ink3); opacity: 0.75; }
+
+    /* Pressed skills */
+    .pressed-skills { display: flex; flex-direction: column; gap: 10px; }
+    .pressed-item { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: start; }
+    .pressed-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--rose); padding-top: 5px; }
+    .pressed-text { font-size: 16px; font-weight: 300; font-style: italic; color: var(--ink2); line-height: 1.7; }
+
+    /* Footer */
+    .footer {
+      background: var(--green); padding: 16px 60px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
+    .footer-back { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.6); text-decoration: none; letter-spacing: 1px; }
+    .footer-back:hover { color: #fff; }
+
+    @media (max-width: 620px) {
+      body { padding: 0 0 40px; }
+      .hero, .content { padding-left: 24px; padding-right: 24px; }
+      .header-band, .footer { padding-left: 24px; padding-right: 24px; }
+      .hero { grid-template-columns: 1fr; }
+      .specimen { grid-template-columns: 1fr; }
+      .spec-sidebar { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 10px; }
+      .spec-rule { display: none; }
+    }
+  </style>
+</head>
+<body>
+<article class="page">
+
+  <!-- Botanical corner SVGs -->
+  <svg class="botanical-tl" width="200" height="200" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+    <path d="M10 190 Q35 110 90 65 Q55 98 22 155" stroke="#3D6B50" stroke-width="1.4" fill="none"/>
+    <path d="M32 178 Q68 88 135 32" stroke="#3D6B50" stroke-width="0.9" fill="none"/>
+    <ellipse cx="90" cy="65" rx="26" ry="16" fill="#6A9E7F" transform="rotate(-30 90 65)"/>
+    <ellipse cx="135" cy="32" rx="21" ry="13" fill="#3D6B50" transform="rotate(-50 135 32)"/>
+    <ellipse cx="55" cy="112" rx="19" ry="12" fill="#8B4E6E" transform="rotate(20 55 112)"/>
+    <circle cx="82" cy="74" r="6" fill="#C4614A"/>
+    <circle cx="128" cy="41" r="5" fill="#C4614A"/>
+    <path d="M60 158 Q78 122 108 93" stroke="#6A9E7F" stroke-width="0.8" fill="none"/>
+    <ellipse cx="108" cy="93" rx="14" ry="9" fill="#C8DDD0" transform="rotate(-40 108 93)"/>
+    <circle cx="48" cy="140" r="4" fill="#B8902A"/>
+  </svg>
+  <svg class="botanical-tr" width="200" height="200" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+    <path d="M10 190 Q35 110 90 65 Q55 98 22 155" stroke="#3D6B50" stroke-width="1.4" fill="none"/>
+    <path d="M32 178 Q68 88 135 32" stroke="#3D6B50" stroke-width="0.9" fill="none"/>
+    <ellipse cx="90" cy="65" rx="26" ry="16" fill="#6A9E7F" transform="rotate(-30 90 65)"/>
+    <ellipse cx="135" cy="32" rx="21" ry="13" fill="#3D6B50" transform="rotate(-50 135 32)"/>
+    <ellipse cx="55" cy="112" rx="19" ry="12" fill="#8B4E6E" transform="rotate(20 55 112)"/>
+    <circle cx="82" cy="74" r="6" fill="#C4614A"/>
+    <circle cx="128" cy="41" r="5" fill="#C4614A"/>
+  </svg>
+  <svg class="botanical-bl" width="180" height="180" viewBox="0 0 180 180" fill="none" aria-hidden="true">
+    <path d="M10 10 Q45 68 112 100" stroke="#3D6B50" stroke-width="1.1" fill="none"/>
+    <ellipse cx="68" cy="60" rx="23" ry="14" fill="#6A9E7F" transform="rotate(15 68 60)"/>
+    <ellipse cx="112" cy="100" rx="18" ry="11" fill="#8B4E6E" transform="rotate(-20 112 100)"/>
+    <circle cx="73" cy="52" r="6" fill="#C4614A"/>
+    <path d="M28 34 Q62 73 90 112" stroke="#6A9E7F" stroke-width="0.8" fill="none"/>
+    <ellipse cx="90" cy="112" rx="14" ry="8" fill="#C8DDD0" transform="rotate(10 90 112)"/>
+    <circle cx="40" cy="80" r="4" fill="#B8902A"/>
+  </svg>
+
+  <div class="header-band">
+    <span class="hb-text">ICS 4 Capstone · Strathmore University · 2025</span>
+    <div class="hb-links">
+      <a href="[Your LinkedIn URL]" target="_blank" rel="noopener" class="hb-link">LinkedIn ↗</a>
+      <a href="https://github.com/[your-username]" target="_blank" rel="noopener" class="hb-link">GitHub ↗</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-text">
+      <p class="hero-classification">Specimen No. ICS–2026 · Nairobi, Kenya</p>
+      <h1 class="hero-name">[Isaac Kariuki]</h1>
+      <p class="hero-epithet">[Lead Software Engineer]</p>
+      <div class="hero-tags">
+        <span class="hero-tag">BSc Informatics and Computer Science</span>
+        <span class="hero-tag">Open to work</span>
+        <span class="hero-tag">Class of 2027</span>
+      </div>
+    </div>
+    <div class="specimen-photo">
+      <div class="photo-mount" role="img" aria-label="Profile photo — replace with your own">
+        <!--
+          TO ADD YOUR PHOTO:
+          Delete .photo-upload-hint and replace with:
+          <img src="images/your-photo.jpg" alt="Photo of [Your Name]">
+        -->
+        <div class="photo-upload-hint">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5C4A3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>paste your<br>photo here</span>
+        </div>
+      </div>
+      <p class="photo-label">fig. I — portrait</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="specimen">
+      <div class="spec-sidebar">
+        <span class="spec-number">Sp. 01</span>
+        <span class="spec-genus">Missio technologiae</span>
+        <span class="spec-family">Mission</span>
+        <div class="spec-rule"></div>
+      </div>
+      <div class="spec-body">
+        <h2 class="spec-heading">My Coding Mission</h2>
+        <p class="spec-prompt">What kind of real-world problems do you want to solve using technology? Write 2–3 sentences.</p>
+        <p class="spec-answer">[Write your answer here]</p>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-sidebar">
+        <span class="spec-number">Sp. 02</span>
+        <span class="spec-genus">Artes digitales</span>
+        <span class="spec-family">Tech Stack</span>
+        <div class="spec-rule"></div>
+      </div>
+      <div class="spec-body">
+        <h2 class="spec-heading">My Tech Stack</h2>
+        <p class="spec-prompt">What tools do you know now? What two technologies do you want to learn next?</p>
+        <div class="materia">
+          <div class="materia-row">
+            <span class="mat-label">Proficient in</span>
+            <span class="mat-val placeholder">e.g. Python, HTML &amp; CSS</span>
+          </div>
+          <div class="materia-row">
+            <span class="mat-label">Fluent in</span>
+            <span class="mat-val placeholder">e.g. JavaScript, SQL</span>
+          </div>
+          <div class="materia-row">
+            <span class="mat-label">Cultivating</span>
+            <span class="mat-val placeholder">e.g. React — in progress</span>
+          </div>
+          <div class="materia-row">
+            <span class="mat-label">Germinating</span>
+            <span class="mat-val placeholder">e.g. Docker — next season</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-sidebar">
+        <span class="spec-number">Sp. 03</span>
+        <span class="spec-genus">Vita extra codicem</span>
+        <span class="spec-family">Passions</span>
+        <div class="spec-rule"></div>
+      </div>
+      <div class="spec-body">
+        <h2 class="spec-heading">My Passions</h2>
+        <p class="spec-prompt">What do you love doing when you are not looking at a computer screen?</p>
+        <p class="spec-answer">[e.g., playing football, baking, photography, reading]</p>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-sidebar">
+        <span class="spec-number">Sp. 04</span>
+        <span class="spec-genus">Artes acquisitae</span>
+        <span class="spec-family">Skills</span>
+        <div class="spec-rule"></div>
+      </div>
+      <div class="spec-body">
+        <h2 class="spec-heading">Skills Acquired</h2>
+        <p class="spec-prompt">The three most valuable life or professional skills from your degree.</p>
+        <div class="pressed-skills">
+          <div class="pressed-item">
+            <span class="pressed-num">i.</span>
+            <span class="pressed-text">[Skill 1 — e.g., Breaking complex problems into smaller steps]</span>
+          </div>
+          <div class="pressed-item">
+            <span class="pressed-num">ii.</span>
+            <span class="pressed-text">[Skill 2 — e.g., Collaborating under pressure in a team]</span>
+          </div>
+          <div class="pressed-item">
+            <span class="pressed-num">iii.</span>
+            <span class="pressed-text">[Skill 3 — e.g., Communicating technical ideas clearly]</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-sidebar">
+        <span class="spec-number">Sp. 05</span>
+        <span class="spec-genus">Energia et studium</span>
+        <span class="spec-family">Energy</span>
+        <div class="spec-rule"></div>
+      </div>
+      <div class="spec-body">
+        <h2 class="spec-heading">Energy &amp; Engagement</h2>
+        <p class="spec-prompt">Which classes or projects brought you the most energy, and why?</p>
+        <p class="spec-answer">[Write your answer here]</p>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-sidebar">
+        <span class="spec-number">Sp. 06</span>
+        <span class="spec-genus">Retrospectio</span>
+        <span class="spec-family">Reflection</span>
+        <div class="spec-rule"></div>
+      </div>
+      <div class="spec-body">
+        <h2 class="spec-heading">Looking Back</h2>
+        <p class="spec-prompt">If you were to give advice to your first-year self, what would it be?</p>
+        <p class="spec-answer">[Write your answer here]</p>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-sidebar">
+        <span class="spec-number">Sp. 07</span>
+        <span class="spec-genus">Circulus influentiae</span>
+        <span class="spec-family">Gratitude</span>
+        <div class="spec-rule"></div>
+      </div>
+      <div class="spec-body">
+        <h2 class="spec-heading">Circle of Influence</h2>
+        <p class="spec-prompt">Who are the mentors, peers, or lecturers who have poured into you?</p>
+        <p class="spec-answer">[Write your answer here]</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span class="footer-copy">Herbarium ICS · Strathmore University · Nairobi 2025</span>
+    <a href="index.html" class="footer-back">← Back to company page</a>
+  </footer>
+
+</article>
+</body>
+</html>
